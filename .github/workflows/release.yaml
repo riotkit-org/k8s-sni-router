@@ -61,7 +61,7 @@ jobs:
             - name: Push to ghcr.io
               uses: appany/helm-oci-chart-releaser@v0.3.0
               with:
-                name: helm-sni-router
+                name: sni-router
                 repository: riotkit-org
                 tag: "${{ env.RELEASE_VERSION }}"
                 path: helm/sni-router
