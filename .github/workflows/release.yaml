@@ -21,11 +21,9 @@ jobs:
               with:
                   version: v3.8.1
 
-            - name: Set up chart-testing
-              uses: helm/chart-testing-action@v2.2.1
-
-            - name: Run chart-testing (lint)
-              run: ct lint
+            - name: Linting
+              working-directory: helm/sni-router
+              run: helm lint ./
 
             - name: Publish Helm chart
               if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
