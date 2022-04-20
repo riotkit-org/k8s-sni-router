@@ -54,3 +54,22 @@ jobs:
 
                   app_version: "${{github.ref_name}}"
                   chart_version: "${{github.ref_name}}"
+
+            - name: Extract tag name
+              id: tag
+              uses: actions/github-script@0.2.0
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                    return context.payload.ref.replace(/\/refs\/tags\//, '');
+
+            - name: Push to ghcr.io
+              uses: appany/helm-oci-chart-releaser@v0.3.0
+              with:
+                name: sni-router
+                repository: riotkit-org
+                tag: "${{ steps.tag.outputs.result }}"
+                path: helm/sni-router # Default charts/{name}
+                registry: ghcr.io
+                registry_username: __token__
+                registry_password: ${{ secrets.GITHUB_TOKEN }}
