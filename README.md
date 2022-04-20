@@ -1,7 +1,7 @@
 k8s-sni-router
 ==============
 
-TLS-sni + HTTP-host router on Kubernetes based on Traefik (optionally) and NGINX.
+TLS-sni + HTTP-host router proxy on Kubernetes based on Traefik (optionally) and NGINX. **Designed to work with external hosts outside cluster.**
 
 Features
 --------
