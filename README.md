@@ -11,6 +11,13 @@ Features
 - Route HTTP using host header
 - Support for Let's Encrypt pass-through, so the proxied server can normally issue Let's Encrypt certificates using HTTP-based method
 
+Setting up
+----------
+
+```yaml
+helm repo add riotkit-org https://riotkit-org.github.io/helm-of-revolution/
+helm install my-sni-router riotkit-org/sni-router --version 1.0.3 --values ./my-values.yaml
+```
 
 Example configuration
 ---------------------
