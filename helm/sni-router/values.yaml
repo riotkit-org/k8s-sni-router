@@ -1,0 +1,31 @@
+
+routes:
+    - dns: federacja-anarchistyczna.pl
+      ip: 185.208.164.110
+
+nginx:
+    workerProcesses: 4
+    workerConnections: 2048
+    metrics:
+        allowIp: 127.0.0.1
+    httpProxy:
+        zoneLength: 20m
+        limitConn: 10
+    tlsProxy:
+        zoneLength: 20m
+        limitConn: 50
+        connectTimeout: 15s
+        timeout: 10800s
+        preReadTimeout: 10800s
+
+service:
+    # alternatively you can switch to e.g. LoadBalancer type and disable Traefik
+    useTraefik: true
+    type: ClusterIP
+
+podAnnotations: {}
+fullNameOverride: ""
+
+image:
+    repository: nginx
+    tag: "1.19"

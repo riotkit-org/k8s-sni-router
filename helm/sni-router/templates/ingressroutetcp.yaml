@@ -1,0 +1,48 @@
+{{- if .Values.service.useTraefik }}
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+    name: {{ include "sni-router.fullname" . }}-tcp
+    annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tcp: "true"
+spec:
+  entryPoints:
+      - websecure
+  routes:
+      {{- range $key, $host := $.Values.routes }}
+      - match: HostSNI(`{{ $host.dns }}`)
+        services:
+          - name: {{ include "sni-router.fullname" $ }}
+            namespace: {{ $.Release.namespace }}
+            port: 4443
+            weight: 1
+      {{- end }}
+  tls:
+      passthrough: true
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+    name: {{ include "sni-router.fullname" . }}-http
+spec:
+  entryPoints:
+      - web
+  routes:
+      {{- range $key, $host := $.Values.routes }}
+      - match: Host(`{{ $host.dns }}`)
+        kind: Rule
+        services:
+          - name: {{ include "sni-router.fullname" $ }}
+            namespace: {{ $.Release.namespace }}
+            port: 8080
+            weight: 1
+            passHostHeader: true
+            scheme: http
+      {{- end }}
+
+{{- end }}

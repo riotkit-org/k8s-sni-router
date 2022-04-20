@@ -1,0 +1,6 @@
+apiVersion: v2
+name: sni-router
+description: "Simple TLS-SNI based router using Traefik and NGINX"
+type: application
+version: 0.1.0
+appVersion: "main"  # replaced by CI on build stage

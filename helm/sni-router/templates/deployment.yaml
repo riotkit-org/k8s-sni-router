@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{ include "sni-router.fullname" . }}
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            {{- include "sni-router.selectorLabels" . | nindent 10 }}
+    template:
+        metadata:
+          {{- with .Values.podAnnotations }}
+            annotations:
+              {{- toYaml . | nindent 16 }}
+          {{- end }}
+            labels:
+              {{- include "sni-router.selectorLabels" . | nindent 16 }}
+              {{- if eq (.Values.image.tag | default .Chart.AppVersion) "latest" | or (eq (.Values.image.tag | default .Chart.AppVersion) "snapshot") }}
+                refreshImageTag: "{{- randAlphaNum 24 | nospace -}}"
+              {{- end }}
+        spec:
+            containers:
+                - name: nginx
+                  image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+                  command:
+                      - /bin/sh
+                  args:
+                      - "/entrypoint-router.sh"
+                  ports:
+                      - containerPort: 8080
+                        name: http
+                      - containerPort: 8081
+                        name: metrics
+                      - containerPort: 4443
+                        name: tls
+                  volumeMounts:
+                      - mountPath: /etc/nginx/nginx.conf
+                        name: config
+                        subPath: nginx.conf
+                      - mountPath: /entrypoint-router.sh
+                        name: config
+                        subPath: entrypoint.sh
+            volumes:
+                - name: config
+                  configMap:
+                      name: {{ include "sni-router.fullname" . }}-router-config
