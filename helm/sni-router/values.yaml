@@ -29,3 +29,8 @@ fullNameOverride: ""
 image:
     repository: nginx
     tag: "1.19"
+
+# podSecurityContext: {}
+# nodeSelector: {}
+# affinity: {}
+# tolerations: {}
