@@ -16,7 +16,7 @@ Setting up
 
 ```yaml
 helm repo add riotkit-org https://riotkit-org.github.io/helm-of-revolution/
-helm install my-sni-router riotkit-org/sni-router --version 1.0.3 --values ./my-values.yaml
+helm install my-sni-router riotkit-org/sni-router --values ./my-values.yaml
 ```
 
 Example configuration
