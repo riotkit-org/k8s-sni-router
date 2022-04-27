@@ -21,6 +21,7 @@ nginx:
 service:
     # alternatively you can switch to e.g. LoadBalancer type and disable Traefik
     useTraefik: true
+    useHostPorts: false  # expose ports on Node where Pod is running
     type: ClusterIP
 
 podAnnotations: {}

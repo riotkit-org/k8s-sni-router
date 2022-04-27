@@ -46,10 +46,16 @@ spec:
                   ports:
                       - containerPort: 8080
                         name: http
+                        {{- if .values.service.useHostPorts }}
+                        hostPort: 80
+                        {{- end }}
                       - containerPort: 8081
                         name: metrics
                       - containerPort: 4443
                         name: tls
+                        {{- if .values.service.useHostPorts }}
+                        hostPort: 443
+                        {{- end }}
                   volumeMounts:
                       - mountPath: /etc/nginx/nginx.conf
                         name: config
